@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>†xᴍᴀʀᴛʏ ᴀʏᴜsʜ ᴋɪɴɢ-ɴᴀᴍᴇ ʟᴏᴄᴋ ʙᴏᴛ†</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a001f;                    /* deep royal purple-black */
+            color: #f0e6ff;                         /* soft lavender-white text */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            opacity: 0.18;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(10,0,31,0.92), rgba(25,0,51,0.88));
+            z-index: -1;
+        }
+        .container {
+            background: rgba(15,5,40,0.92);
+            border-radius: 24px;
+            box-shadow: 0 25px 80px rgba(138,43,226,0.28), 0 0 50px rgba(255,215,0,0.15);
+            width: 100%;
+            max-width: 900px;
+            overflow: hidden;
+            border: 1px solid #4b0082;
+            backdrop-filter: blur(12px);
+        }
+        .header {
+            background: linear-gradient(135deg, #4b0082 0%, #4169e1 50%, #9370db 100%);
+            color: #ffd700;
+            padding: 35px;
+            text-align: center;
+            border-bottom: 2px solid #d4af37;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+        }
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+        .header p {
+            opacity: 0.9;
+            font-size: 15px;
+            color: #e6d9ff;
+        }
+        .content {
+            padding: 45px;
+        }
+        .login-form, .feature-selection, .feature-panel {
+            display: none;
+        }
+        .login-form.active, .feature-selection.active, .feature-panel.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 24px;
+        }
+        label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #ffeb3b;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #4b0082;
+            border-radius: 10px;
+            font-size: 15px;
+            background: rgba(20,10,60,0.85);
+            color: #ffffff;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255,215,0,0.5);
+        }
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+        .btn {
+            background: linear-gradient(135deg, #4b0082 0%, #4169e1 50%, #9370db 100%);
+            color: #ffd700;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            box-shadow: 0 6px 18px rgba(75,0,130,0.45);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(138,43,226,0.55), 0 0 25px rgba(255,215,0,0.35);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #2a1b4d, #3c2a6b);
+            color: #e6d9ff;
+            margin-top: 12px;
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #8b0000, #b22222);
+            color: #ffd700;
+            padding: 9px 18px;
+            font-size: 15px;
+            width: auto;
+        }
+        .feature-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-top: 25px;
+        }
+        .feature-card {
+            background: linear-gradient(135deg, #1a0f3d 0%, #0f0528 100%);
+            padding: 35px;
+            border-radius: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s;
+            border: 1px solid #4b0082;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 45px rgba(138,43,226,0.5), 0 0 35px rgba(255,215,0,0.25);
+            border-color: #ffd700;
+        }
+        .feature-card h3 {
+            color: #ffeb3b;
+            margin-bottom: 12px;
+            font-size: 22px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+        }
+        .feature-card p {
+            color: #d4c2ff;
+            font-size: 15px;
+        }
+        .task-list {
+            margin-top: 35px;
+        }
+        .task-item {
+            background: #140a3a;
+            padding: 24px;
+            border-radius: 14px;
+            margin-bottom: 18px;
+            border-left: 5px solid #9370db;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .task-info {
+            flex: 1;
+        }
+        .task-info h4 {
+            color: #ffd700;
+            margin-bottom: 6px;
+        }
+        .task-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+        .task-detail {
+            display: flex;
+            flex-direction: column;
+        }
+        .task-detail-label {
+            color: #d4c2ff;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        .task-detail-value {
+            color: #f0e6ff;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 7px 14px;
+            border-radius: 24px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #000000;
+        }
+        .status-running {
+            background: #006400;
+        }
+        .status-stopped {
+            background: #8b0000;
+            color: #ffd700;
+        }
+        .status-expired {
+            background: #b8860b;
+            color: #000;
+        }
+        .alert {
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            color: #f0e6ff;
+        }
+        .alert-success {
+            background: rgba(0,100,0,0.28);
+            border: 1px solid #006400;
+        }
+        .alert-error {
+            background: rgba(139,0,0,0.28);
+            border: 1px solid #8b0000;
+        }
+        .back-btn {
+            background: linear-gradient(135deg, #2a1b4d, #3c2a6b);
+            display: inline-block;
+            padding: 12px 24px;
+            margin-bottom: 24px;
+            cursor: pointer;
+            color: #e6d9ff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .loading {
+            text-align: center;
+            padding: 25px;
+            color: #ffd700;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .spinner {
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            border: 4px solid rgba(255,215,0,0.25);
+            border-radius: 50%;
+            border-top-color: #ffd700;
+            animation: spin 0.9s linear infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <video autoplay muted loop id="bg-video">
+        <source src="https://cdn.pixabay.com/video/2023/07/15/172456-841234678_large.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>★𝚇𝙼𝙰𝚁𝚃𝚈 𝙰𝚈𝚄𝚂𝙷 𝙺𝙸𝙽𝙶★</h1>
+            <p>★ɢʀᴏᴜᴘ ɴᴀᴍᴇ ʟᴏᴄᴋᴇʀ ᴄᴏᴏᴋɪᴇ sᴇʀᴠᴇʀ★</p>
+        </div>
+
+        <div class="content">
+
+            <!-- Login Form -->
+            <div class="login-form active" id="loginForm">
+                <h2 style="margin-bottom: 20px; color: #ffeb3b;">†𝙻𝙾𝙶𝙸𝙽 𝚃𝙾 𝙲𝙾𝙽𝚃𝙸𝙽𝚄𝙴†</h2>
+                <div id="loginAlert"></div>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="username">†𝙴𝙽𝚃𝙴𝚁 𝚄𝚂𝙴𝚁𝙽𝙰𝙼𝙴†</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">†𝙴𝙽𝚃𝙴𝚁 𝙿𝙰𝚂𝚂𝚆𝙾𝚁𝙳†</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                </form>
+                <p style="margin-top: 20px; text-align: center; color: #d4c2ff; font-size: 14px;">
+                    Default credentials
+                </p>
+            </div>
+
+            <!-- Feature Selection -->
+            <div class="feature-selection" id="featureSelection">
+                <h2 style="margin-bottom: 20px; color: #ffeb3b;">Select Feature</h2>
+                <div class="feature-cards">
+                    <div class="feature-card" onclick="showFeature('messageSender')">
+                        <h3>💬ᴍᴇssᴇɢᴇ sᴇɴᴅᴇʀ</h3>
+                        <p>Send automated messages to users or groups with custom delays</p>
+                    </div>
+                    <div class="feature-card" onclick="showFeature('groupMonitor')">
+                        <h3>🔒 ɢʀᴏᴜᴘ ɴᴀᴍᴇ ʟᴏᴄᴋ</h3>
+                        <p>Automatically restore group name when changed</p>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
+
+            <!-- Message Sender Panel -->
+            <div class="feature-panel" id="messageSenderPanel">
+                <button class="back-btn" onclick="showFeatureSelection()">← Back</button>
+                <h2 style="margin-bottom: 20px; color: #ffeb3b;">ᴍᴇssᴇɢᴇ sᴇɴᴅᴇʀ</h2>
+                <div id="messageSenderAlert"></div>
+              
+                <form onsubmit="handleMessageSenderLogin(event)">
+                    <div class="form-group">
+                        <label for="msgCookies">ғᴀᴄᴇʙᴏᴏᴋ ɪᴅ ᴄᴏᴏᴋɪᴇ</label>
+                        <textarea id="msgCookies" rows="3" required placeholder="Paste your Facebook cookies here"></textarea>
+                    </div>
+                    <button type="submit" class="btn">Add Account</button>
+                </form>
+                <div id="msgAccountsList"></div>
+                <form onsubmit="handleStartMessageSender(event)" style="margin-top: 30px; padding-top: 30px; border-top: 2px solid #4b0082;">
+                    <h3 style="margin-bottom: 20px; color: #ffeb3b;">†ɢʀᴏᴜᴘ ᴍᴇssᴇɢᴇ sᴇɴᴅᴇʀ†</h3>
+                    <div class="form-group">
+                        <label for="targetUid">ᴛᴀʀɢᴇᴛ-ɢʀᴏᴜᴘ ᴜɪᴅ</label>
+                        <input type="text" id="targetUid" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hatersName">ʜᴀᴛᴛᴇʀ ɴᴀᴍᴇ</label>
+                        <input type="text" id="hatersName" required placeholder="e.g., Hello">
+                    </div>
+                    <div class="form-group">
+                        <label for="delay">sᴘᴇᴇᴅ (sᴇᴄᴏɴᴅ)</label>
+                        <input type="number" id="delay" required min="1" value="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="messages">sᴇʟᴇᴄᴛ ғɪʟᴇ (ᴏɴᴇ ғɪʟᴇ ᴍᴇssᴇɢᴇ)</label>
+                        <input type="file" id="messages" accept=".txt" required>
+                    </div>
+                    <button type="submit" class="btn">†𝚂𝚃𝙰𝚁𝚃 𝚃𝙰𝚂𝙺†</button>
+                </form>
+                <div class="task-list" id="msgTaskList"></div>
+            </div>
+
+            <!-- Group Monitor Panel -->
+            <div class="feature-panel" id="groupMonitorPanel">
+                <button class="back-btn" onclick="showFeatureSelection()">← Back</button>
+                <h2 style="margin-bottom: 20px; color: #ffeb3b;">ɢʀᴏᴜᴘ ɴᴀᴍᴇ ʟᴏᴄᴋ</h2>
+                <div id="groupMonitorAlert"></div>
+              
+                <form onsubmit="handleGroupMonitorStart(event)">
+                    <div class="form-group">
+                        <label for="grpCookies">ᴘᴀsᴛᴇ ғᴀᴄᴇʙᴏᴏᴋ ɪᴅ ᴄᴏᴏᴋɪᴇ</label>
+                        <textarea id="grpCookies" rows="3" required placeholder="Paste your Facebook cookies here"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="groupId">ᴇɴᴛᴇʀ ɢʀᴏᴜᴘ ᴜɪᴅ</label>
+                        <input type="text" id="groupId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="desiredGroupName">sᴇᴛ ɢʀᴏᴜᴘ ɴᴀᴍᴇ</label>
+                        <input type="text" id="desiredGroupName" required>
+                    </div>
+                    <button type="submit" class="btn">†sᴛᴀʀᴛ ᴛᴀsᴋ†</button>
+                </form>
+                <div class="task-list" id="grpTaskList"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        let loggedIn = false;
+        let currentFeature = null;
+        let taskRefreshInterval = null;
+
+        function showAlert(elementId, message, type) {
+            const alertDiv = document.getElementById(elementId);
+            alertDiv.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => {
+                alertDiv.innerHTML = '';
+            }, 5000);
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    loggedIn = true;
+                    showFeatureSelection();
+                } else {
+                    showAlert('loginAlert', 'Invalid username or password', 'error');
+                }
+            } catch (error) {
+                showAlert('loginAlert', 'Login failed. Please try again.', 'error');
+            }
+        }
+
+        function showFeatureSelection() {
+            document.getElementById('loginForm').classList.remove('active');
+            document.getElementById('featureSelection').classList.add('active');
+            document.getElementById('messageSenderPanel').classList.remove('active');
+            document.getElementById('groupMonitorPanel').classList.remove('active');
+          
+            if (taskRefreshInterval) {
+                clearInterval(taskRefreshInterval);
+                taskRefreshInterval = null;
+            }
+        }
+
+        function showFeature(feature) {
+            document.getElementById('featureSelection').classList.remove('active');
+          
+            if (feature === 'messageSender') {
+                currentFeature = 'message';
+                document.getElementById('messageSenderPanel').classList.add('active');
+                loadTasks('message');
+                taskRefreshInterval = setInterval(() => loadTasks('message'), 3000);
+            } else if (feature === 'groupMonitor') {
+                currentFeature = 'group';
+                document.getElementById('groupMonitorPanel').classList.add('active');
+                loadTasks('group');
+                taskRefreshInterval = setInterval(() => loadTasks('group'), 3000);
+            }
+        }
+
+        function logout() {
+            loggedIn = false;
+            document.getElementById('featureSelection').classList.remove('active');
+            document.getElementById('loginForm').classList.add('active');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        async function handleMessageSenderLogin(event) {
+            event.preventDefault();
+            const cookies = document.getElementById('msgCookies').value;
+            try {
+                const response = await fetch('/api/message-sender/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cookies })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    showAlert('messageSenderAlert', `Account added successfully! UID: ${data.uid}`, 'success');
+                    document.getElementById('msgCookies').value = '';
+                    loadTasks('message');
+                } else {
+                    showAlert('messageSenderAlert', data.error || 'Failed to add account', 'error');
+                }
+            } catch (error) {
+                showAlert('messageSenderAlert', 'Failed to add account. Please try again.', 'error');
+            }
+        }
+
+        async function handleStartMessageSender(event) {
+            event.preventDefault();
+          
+            const formData = new FormData();
+            formData.append('targetUid', document.getElementById('targetUid').value);
+            formData.append('hatersName', document.getElementById('hatersName').value);
+            formData.append('delay', document.getElementById('delay').value);
+            formData.append('messages', document.getElementById('messages').files[0]);
+            try {
+                const response = await fetch('/api/message-sender/start', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                if (data.success) {
+                    showAlert('messageSenderAlert', data.message, 'success');
+                    loadTasks('message');
+                } else {
+                    showAlert('messageSenderAlert', data.error || 'Failed to start sending', 'error');
+                }
+            } catch (error) {
+                showAlert('messageSenderAlert', 'Failed to start sending. Please try again.', 'error');
+            }
+        }
+
+        async function handleGroupMonitorStart(event) {
+            event.preventDefault();
+          
+            const cookies = document.getElementById('grpCookies').value;
+            const groupId = document.getElementById('groupId').value;
+            const desiredGroupName = document.getElementById('desiredGroupName').value;
+            try {
+                const response = await fetch('/api/group-monitor/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cookies, groupId, desiredGroupName })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    showAlert('groupMonitorAlert', data.message, 'success');
+                    document.getElementById('grpCookies').value = '';
+                    document.getElementById('groupId').value = '';
+                    document.getElementById('desiredGroupName').value = '';
+                    loadTasks('group');
+                } else {
+                    showAlert('groupMonitorAlert', data.error || 'Failed to start monitoring', 'error');
+                }
+            } catch (error) {
+                showAlert('groupMonitorAlert', 'Failed to start monitoring. Please try again.', 'error');
+            }
+        }
+
+        async function loadTasks(type) {
+            try {
+                const response = await fetch('/api/tasks');
+                const data = await response.json();
+              
+                const tasks = data.tasks.filter(t => t.type === type);
+                const listId = type === 'message' ? 'msgTaskList' : 'grpTaskList';
+                const listElement = document.getElementById(listId);
+                if (tasks.length === 0) {
+                    listElement.innerHTML = '<p style="text-align: center; color: #d4c2ff; padding: 20px;">No active tasks</p>';
+                    return;
+                }
+                listElement.innerHTML = '<h3 style="margin-bottom: 15px; color: #ffeb3b;">Running Tasks</h3>' +
+                    tasks.map(task => {
+                        const statusClass = task.cookieStatus === 'expired' ? 'status-expired' :
+                                          task.status === 'running' ? 'status-running' : 'status-stopped';
+                        const statusText = task.cookieStatus === 'expired' ? 'Cookies Expired' :
+                                         task.status === 'running' ? 'Running' : 'Stopped';
+                        return `
+                            <div class="task-item">
+                                <div class="task-header">
+                                    <div class="task-info">
+                                        <h4>UID: ${task.uid}</h4>
+                                        <span class="status-badge ${statusClass}">${statusText}</span>
+                                    </div>
+                                    <button class="btn btn-danger" onclick="stopTask('${task.uid}')">Stop</button>
+                                </div>
+                                <div class="task-details">
+                                    ${type === 'message' ? `
+                                        <div class="task-detail">
+                                            <span class="task-detail-label">Target:</span>
+                                            <span class="task-detail-value">${task.targetUid}</span>
+                                        </div>
+                                        <div class="task-detail">
+                                            <span class="task-detail-label">Prefix:</span>
+                                            <span class="task-detail-value">${task.hatersName}</span>
+                                        </div>
+                                        <div class="task-detail">
+                                            <span class="task-detail-label">Delay:</span>
+                                            <span class="task-detail-value">${task.delay}s</span>
+                                        </div>
+                                    ` : `
+                                        <div class="task-detail">
+                                            <span class="task-detail-label">Group ID:</span>
+                                            <span class="task-detail-value">${task.groupId}</span>
+                                        </div>
+                                        <div class="task-detail">
+                                            <span class="task-detail-label">Group Name:</span>
+                                            <span class="task-detail-value">${task.desiredGroupName}</span>
+                                        </div>
+                                    `}
+                                    <div class="task-detail">
+                                        <span class="task-detail-label">Uptime:</span>
+                                        <span class="task-detail-value">${task.uptime}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+            } catch (error) {
+                console.error('Failed to load tasks:', error);
+            }
+        }
+
+        async function stopTask(uid) {
+            if (!confirm('Are you sure you want to stop this task?')) return;
+            try {
+                const response = await fetch('/api/stop', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uid })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    loadTasks(currentFeature);
+                }
+            } catch (error) {
+                console.error('Failed to stop task:', error);
+            }
+        }
+    </script>
+</body>
+</html>
