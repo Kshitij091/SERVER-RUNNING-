@@ -1,15 +1,13 @@
 {
-  "name": "mr-kshitiz-group-bot",
+  "name": "mr-kshitiz-bot",
   "version": "1.0.0",
-  "description": "Facebook Group Bot by Kshitiz",
-  "main": "server.js",
+  "description": "Messenger Group Chat Bot",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "dependencies": {
-    "express": "^4.19.2",
-    "body-parser": "^1.20.2",
-    "fca-project-orion": "^1.1.9",
-    "axios": "^1.7.2"
+    "fca-project-orion": "^1.1.5",
+    "axios": "^1.6.0"
   }
 }
