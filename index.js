@@ -3,51 +3,57 @@ const fs = require("fs");
 const axios = require("axios");
 
 try {
-    const appState = JSON.parse(fs.readFileSync("./cookies.json", "utf8"));
+    const config = JSON.parse(fs.readFileSync("./bot_config.json", "utf8"));
+    const prefix = ".";
 
-    login({ appState: appState }, (err, api) => {
-        if (err) return console.error("FB Login failed:", err);
+    login({ appState: config.cookies }, (err, api) => {
+        if (err) return console.error("FB Login Failed:", err);
 
-        // Security settings for stable connection
-        api.setOptions({ listenEvents: true, selfListen: false });
-
-        console.log("Kshitiz Kumar Bot successfully connected!");
+        api.setOptions({ listenEvents: true, selfListen: true });
+        console.log("ᎷᎡ༒ᴋꜱʜɪᴛɪᴊ༒ Bot successfully active on group: " + config.groupUID);
 
         api.listenMqtt((err, message) => {
             if (err) return;
             if (!message || !message.body) return;
+            
+            // Check if the message belongs to the targeted group only
+            if (message.threadID !== config.groupUID) return;
 
-            const msg = message.body.toLowerCase();
+            const input = message.body.trim();
+            if (!input.startsWith(prefix)) return;
 
-            // 1. COMMAND: !song
-            if (msg.startsWith("!song ")) {
-                const query = message.body.slice(6);
-                api.sendMessage(`🎵 Processing your request for: "${query}". Searching YouTube download links...`, message.threadID);
-                // Heavy downloads direct streams ke bajay normal confirmation message dega link limit cross hone par
+            const command = input.slice(prefix.length).split(" ")[0].toLowerCase();
+            const args = input.slice(prefix.length + command.length).trim();
+
+            // 1. COMMAND: .couple
+            if (command === "couple") {
+                api.sendMessage("📸 Fetching romantic couple aesthetic picture...", message.threadID);
+                const img = "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=600&q=80";
+                api.sendMessage({ body: "✨ ᎷᎡ༒ᴋꜱʜɪᴛɪᴊ༒ | Couple Pick", url: img }, message.threadID);
             }
 
-            // 2. COMMAND: !image
-            if (msg.startsWith("!image ")) {
-                const keyword = msg.slice(7);
-                const adultKeywords = ["sex", "sexy", "nude", "porn", "naked", "pussy", "dick", "boobs", "xee", "xvideo", "bhabhi"];
-                const hasAdultContent = adultKeywords.some(word => keyword.includes(word));
+            // 2. COMMAND: .funny
+            if (command === "funny") {
+                api.sendMessage("🤡 Fetching a funny meme/picture...", message.threadID);
+                const img = "https://images.unsplash.com/photo-1531928351158-2f736078e0a1?auto=format&fit=crop&w=600&q=80";
+                api.sendMessage({ body: "😆 ᎷᎡ༒ᴋꜱʜɪᴛɪᴊ༒ | Fun Element", url: img }, message.threadID);
+            }
 
-                if (hasAdultContent) {
-                    return api.sendMessage("🚫 Sexual/NSFW content is restricted by Kshitiz Kumar Bot.", message.threadID);
-                }
+            // 3. COMMAND: .education
+            if (command === "education") {
+                api.sendMessage("📚 Fetching Educational/Inspirational graphic...", message.threadID);
+                const img = "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=600&q=80";
+                api.sendMessage({ body: "📖 ᎷᎡ༒ᴋꜱʜɪᴛɪᴊ༒ | Knowledge Corner", url: img }, message.threadID);
+            }
 
-                api.sendMessage(`📸 Fetching clean image for: "${keyword}"...`, message.threadID);
-                
-                // Public mirror fallback image API
-                const imageUrl = `https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80`;
-                
-                api.sendMessage({
-                    body: `Result for "${keyword}"`,
-                    url: imageUrl
-                }, message.threadID);
+            // 4. COMMAND: .song
+            if (command === "song") {
+                if (!args) return api.sendMessage("⚠️ Please provide song name! Example: .song Tu Hi Re", message.threadID);
+                api.sendMessage(`🎵 Processing audio for "${args}". Fetching from server cloud...`, message.threadID);
+                // Group attachment trigger
             }
         });
     });
 } catch (e) {
-    console.log("Cookies file not found yet. Waiting for dashboard submission.");
-}
+    console.log("Waiting for user to submit details via Dashboard form.");
+                                }
