@@ -2,13 +2,14 @@
   "name": "kshitiz-kumar-bot",
   "version": "1.0.0",
   "description": "Facebook Chatbot by Kshitiz Kumar",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "express": "^4.19.2",
-    "body-parser": "^1.20.2",
-    "request": "^2.88.2"
+    "fb-chat-api": "^1.0.4",
+    "ytdl-core": "^4.11.5",
+    "axios": "^1.6.8"
   }
 }
