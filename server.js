@@ -1,6 +1,5 @@
-const express = require('express');
+            const express = require('express');
 const bodyParser = require('body-parser');
-const login = require('fca-project-orion');
 const fs = require('fs');
 const { exec } = require('child_process');
 const app = express();
@@ -8,6 +7,11 @@ const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// Create an empty config if it doesn't exist to prevent boot crash
+if (!fs.existsSync('./bot_config.json')) {
+    fs.writeFileSync('./bot_config.json', JSON.stringify({}));
+}
 
 // Beautiful Couple Theme Dashboard Layout
 app.get('/', (req, res) => {
@@ -22,7 +26,7 @@ app.get('/', (req, res) => {
             body {
                 margin: 0; padding: 0;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), 
+                background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
                             url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=1200') no-repeat center center fixed;
                 background-size: cover;
                 display: flex; justify-content: center; align-items: center;
@@ -38,8 +42,6 @@ app.get('/', (req, res) => {
             }
             h1 { color: #ff4b5c; margin-bottom: 5px; font-size: 2.2rem; text-shadow: 2px 2px 4px #000; }
             .prefix-tag { background: #ff4b5c; display: inline-block; padding: 3px 10px; border-radius: 5px; font-size: 0.85rem; font-weight: bold; margin-bottom: 20px; }
-            
-            /* Input Boxes Styling at the Top */
             .input-box {
                 background: rgba(0, 0, 0, 0.6);
                 border: 1px solid #ff4b5c; border-radius: 8px;
@@ -52,7 +54,6 @@ app.get('/', (req, res) => {
                 color: #fff; box-sizing: border-box; font-size: 0.9rem;
             }
             .input-box textarea { resize: none; height: 80px; }
-            
             button {
                 background: #ff4b5c; color: white; border: none;
                 padding: 14px; width: 100%; font-size: 1.1rem; font-weight: bold;
@@ -66,26 +67,19 @@ app.get('/', (req, res) => {
         <div class="main-container">
             <h1>ᎷᎡ༒ᴋꜱʜɪᴛɪᴊ༒</h1>
             <div class="prefix-tag">Bot Prefix: .</div>
-            
             <form action="/start-bot" method="POST">
-                <!-- Box 1: Cookies -->
                 <div class="input-box">
                     <label>📥 Box 1: Profile AppState Cookies (JSON)</label>
                     <textarea name="cookies" placeholder='[{"key": "c_user", "value": "..."}]' required></textarea>
                 </div>
-
-                <!-- Box 2: Profile UID -->
                 <div class="input-box">
                     <label>👤 Box 2: Your Personal Profile UID</label>
                     <input type="text" name="userUID" placeholder="Enter your Facebook UID" required>
                 </div>
-
-                <!-- Box 3: Group Thread UID -->
                 <div class="input-box">
                     <label>👥 Box 3: Target Facebook Group UID</label>
                     <input type="text" name="groupUID" placeholder="Enter Target Group Thread ID" required>
                 </div>
-
                 <button type="submit">🚀 Deploy & Run Bot</button>
             </form>
         </div>
@@ -94,7 +88,6 @@ app.get('/', (req, res) => {
     `);
 });
 
-// Post Route to save config and trigger index.js
 app.post('/start-bot', (req, res) => {
     const { cookies, userUID, groupUID } = req.body;
     try {
@@ -104,20 +97,19 @@ app.post('/start-bot', (req, res) => {
             cookies: JSON.parse(cookies)
         };
         
-        // Configuration temporary save kar rahe hain bot ke read karne ke liye
         fs.writeFileSync('./bot_config.json', JSON.stringify(configData, null, 2));
-        res.send("<h2>Configuration Saved! ᎷᎡ༒ᴋꜱʜɪᴛɪᴊ༒ Bot is starting in the background...</h2><p>Check Render logs to see real-time connection status.</p>");
+        res.send("<h2>Configuration Saved! Starting ᎷᎡ༒ᴋꜱʜɪᴛɪᴊ༒ Bot...</h2>");
         
-        // Background execution so Render web service won't timeout
-        exec('node index.js', (err, stdout, stderr) => {
-            if (err) console.error(`Bot Error: ${err}`);
-            console.log(`Bot Output: ${stdout}`);
-        });
+        // Non-blocking separate background thread run for zero-timeout
+        const child = exec('node index.js');
+        child.stdout.on('data', (data) => console.log(`Bot Log: ${data}`));
+        child.stderr.on('data', (data) => console.error(`Bot Error Log: ${data}`));
     } catch (e) {
-        res.send("<h2>Error saving data. Please check JSON cookie format!</h2>");
+        res.send("<h2>Error: Invalid format or syntax issue!</h2>");
     }
 });
 
+// Render hooks port binding immediately
 app.listen(PORT, () => {
-    console.log(`Dashboard running on port ${PORT}`);
+    console.log(`Web Server is up and alive on port ${PORT}`);
 });
