@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>ᎷᎡ༒ᴋꜱʜɪᴛɪᴊ༒ Bot Dashboard</title>
+        <title>ᎷᎡ༒ᴋꜱʜɪᴛɪz༒ Bot Dashboard</title>
         <style>
             body {
                 margin: 0; padding: 0;
@@ -65,19 +65,19 @@ app.get('/', (req, res) => {
     </head>
     <body>
         <div class="main-container">
-            <h1>ᎷᎡ༒ᴋꜱʜɪᴛɪᴊ༒</h1>
+            <h1>ᎷᎡ༒ᴋꜱʜɪᴛɪz༒</h1>
             <div class="prefix-tag">Bot Prefix: .</div>
             <form action="/start-bot" method="POST">
                 <div class="input-box">
-                    <label>📥 Box 1: Profile AppState Cookies (JSON)</label>
+                    <label>📥 :  AppState Cookies (JSON)</label>
                     <textarea name="cookies" placeholder='[{"key": "c_user", "value": "..."}]' required></textarea>
                 </div>
                 <div class="input-box">
-                    <label>👤 Box 2: Your Personal Profile UID</label>
+                    <label>👤 :  Bot Profile UID</label>
                     <input type="text" name="userUID" placeholder="Enter your Facebook UID" required>
                 </div>
                 <div class="input-box">
-                    <label>👥 Box 3: Target Facebook Group UID</label>
+                    <label>👥 : Target Facebook Group UID</label>
                     <input type="text" name="groupUID" placeholder="Enter Target Group Thread ID" required>
                 </div>
                 <button type="submit">🚀 Deploy & Run Bot</button>
