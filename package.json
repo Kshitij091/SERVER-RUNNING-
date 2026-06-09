@@ -8,8 +8,7 @@
   },
   "dependencies": {
     "express": "^4.19.2",
-    "fb-chat-api": "^1.0.4",
-    "ytdl-core": "^4.11.5",
-    "axios": "^1.6.8"
+    "fca-project-orion": "^1.1.9",
+    "axios": "^1.7.2"
   }
 }
