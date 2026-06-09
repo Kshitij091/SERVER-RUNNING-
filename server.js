@@ -1,16 +1,19 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
-const { startBotEngine } = require('./index.js'); // Direct import done here
+const path = require('path');
+const { startBotEngine } = require('./index.js');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
+const configPath = path.join(__dirname, 'bot_config.json');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Create an empty config if it doesn't exist
-if (!fs.existsSync('./bot_config.json')) {
-    fs.writeFileSync('./bot_config.json', JSON.stringify({}));
+// Create an empty config if it doesn't exist to prevent boot crash
+if (!fs.existsSync(configPath)) {
+    fs.writeFileSync(configPath, JSON.stringify({}));
 }
 
 // Beautiful Couple Theme Dashboard Layout
@@ -91,28 +94,51 @@ app.get('/', (req, res) => {
 app.post('/start-bot', (req, res) => {
     const { cookies, userUID, groupUID } = req.body;
     try {
+        let parsedCookies;
+        try {
+            parsedCookies = JSON.parse(cookies);
+        } catch (jsonErr) {
+            return res.send("<h2>Error: Cookies ka format sahi nahi hai! Ek sahi JSON array paste karein.</h2>");
+        }
+
         const configData = {
             userUID: userUID,
             groupUID: groupUID,
-            cookies: JSON.parse(cookies)
+            cookies: parsedCookies
         };
         
-        fs.writeFileSync('./bot_config.json', JSON.stringify(configData, null, 2));
-        res.send("<h2>Configuration Saved! Starting ᎷᎡ༒ᴋꜱʜɪᴛɪᴢ༒ Bot Inside Active Thread...</h2>");
+        fs.writeFileSync(configPath, JSON.stringify(configData, null, 2));
+        res.send("<h2>Configuration Saved Successfully! ᎷᎡ༒ᴋꜱʜɪᴛɪz༒ Bot background me initialize ho raha hai... Aap is tab ko close kar sakte hain.</h2>");
         
-        // Triggering the engine directly inside the main thread safely
-        console.log("Initializing bot engine from dashboard trigger...");
-        startBotEngine();
+        // Non-blocking trigger to safe start
+        setTimeout(() => {
+            console.log("Dashboard trigger received. Starting bot engine...");
+            startBotEngine();
+        }, 1000);
 
     } catch (e) {
-        res.send("<h2>Error: Invalid format or syntax issue!</h2>");
+        res.send(`<h2>Error: ${e.message}</h2>`);
     }
 });
 
-// Start web server and auto-boot if configuration already exists
+// Render immediately binds the port to stay active
 app.listen(PORT, () => {
     console.log(`Web Server is up and alive on port ${PORT}`);
-    // Agar Render reload hota hai aur pehle se login details hain, toh bot automatically start ho jayega
-    startBotEngine(); 
+    
+    // Safely attempt an auto-boot if valid configuration already exists
+    try {
+        if (fs.existsSync(configPath)) {
+            const raw = fs.readFileSync(configPath, 'utf8');
+            if (raw && raw !== '{}') {
+                const config = JSON.parse(raw);
+                if (config.cookies && config.groupUID) {
+                    console.log("Existing configuration detected. Booting engine automatically...");
+                    startBotEngine();
+                }
+            }
+        }
+    } catch (err) {
+        console.log("Automatic initialization skipped. Waiting for user input via dashboard...");
+    }
 });
-            
+             
