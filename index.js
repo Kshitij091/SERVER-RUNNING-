@@ -16,7 +16,7 @@ function startBotEngine() {
             if (err) return console.error("FB Login Error: ", err);
 
             api.setOptions({ listenEvents: true, selfListen: true });
-            console.log("ᎷᎡ༒ᴋꜱʜɪᴛɪᴊ༒ Bot successfully synchronized with target chat group.");
+            console.log("ᎷᎡ༒ᴋꜱʜɪᴛɪz༒ Bot successfully synchronized with target chat group.");
 
             api.listenMqtt((err, message) => {
                 if (err || !message || !message.body) return;
@@ -30,15 +30,15 @@ function startBotEngine() {
 
                 if (command === "couple") {
                     const img = "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=600&q=80";
-                    api.sendMessage({ body: "✨ ᎷᎡ༒ᴋꜱʜɪᴛɪᴊ༒ | Couple Theme", url: img }, message.threadID);
+                    api.sendMessage({ body: "✨ ᎷᎡ༒ᴋꜱʜɪᴛɪz༒ | Couple Theme", url: img }, message.threadID);
                 }
                 if (command === "funny") {
                     const img = "https://images.unsplash.com/photo-1531928351158-2f736078e0a1?auto=format&fit=crop&w=600&q=80";
-                    api.sendMessage({ body: "😆 ᎷᎡ༒ᴋꜱʜɪᴛɪᴊ༒ | Joke Concept", url: img }, message.threadID);
+                    api.sendMessage({ body: "😆 ᎷᎡ༒ᴋꜱʜɪᴛɪz༒ | Joke Concept", url: img }, message.threadID);
                 }
                 if (command === "education") {
                     const img = "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=600&q=80";
-                    api.sendMessage({ body: "📖 ᎷᎡ༒ᴋꜱʜɪᴛɪᴊ༒ | Global Literacy", url: img }, message.threadID);
+                    api.sendMessage({ body: "📖 ᎷᎡ༒ᴋꜱʜɪᴛɪz༒ | Global Literacy", url: img }, message.threadID);
                 }
                 if (command === "song") {
                     if (!args) return api.sendMessage("⚠️ Song name is mandatory!", message.threadID);
