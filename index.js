@@ -1,42 +1,47 @@
 const login = require("fca-project-orion");
 const fs = require("fs");
+const path = require("path");
 const axios = require("axios");
 
 function startBotEngine() {
     try {
-        if (!fs.existsSync("./bot_config.json")) {
-            console.log("Config file not found. Waiting for dashboard...");
+        const configPath = path.join(__dirname, 'bot_config.json');
+        
+        if (!fs.existsSync(configPath)) {
+            console.log("Engine Info: bot_config.json missing. Waiting for dashboard configuration...");
             return;
         }
         
-        const raw = fs.readFileSync("./bot_config.json", "utf8");
+        const raw = fs.readFileSync(configPath, "utf8");
         if (!raw || raw === '{}') {
-            return console.log("Waiting for dashboard form credentials mapping...");
+            console.log("Engine Info: Credentials not mapped yet. Complete the web form to synchronize.");
+            return;
         }
         
         const config = JSON.parse(raw);
         const prefix = ".";
 
         if (!config.cookies || !config.groupUID) {
-            return console.log("Missing cookies or Group UID in config.json");
+            console.log("Engine Warning: Missing cookies or groupUID within layout settings.");
+            return;
         }
 
         login({ appState: config.cookies }, (err, api) => {
-            if (err) return console.error("FB Login Error: ", err);
+            if (err) {
+                console.error("FB Login Error tracker: ", err.message || err);
+                return; // Crash block added here to prevent status 1 failure
+            }
 
-            // Setting options for stable listening
             api.setOptions({ 
                 listenEvents: true, 
-                selfListen: false, // Isko false rakhein taaki bot khud ke messages par trigger na ho
-                online: true
+                selfListen: false, // Isko false rakha hai taaki bot khud ke text par loop na kare
+                online: true 
             });
             
             console.log("ᎷᎡ༒ᴋꜱʜɪᴛɪz༒ Bot successfully synchronized with target chat group.");
 
             api.listenMqtt((err, message) => {
                 if (err || !message || !message.body) return;
-                
-                // Ensure the message is from the configured group
                 if (String(message.threadID) !== String(config.groupUID)) return;
 
                 const input = message.body.trim();
@@ -64,14 +69,12 @@ function startBotEngine() {
             });
         });
     } catch(e) {
-        console.error("Engine execution failure: ", e.message);
+        console.error("Engine internal exception: ", e.message);
     }
 }
 
-// Exporting the function so server.js can start it directly
 module.exports = { startBotEngine };
 
-// If run directly via node index.js
 if (require.main === module) {
     startBotEngine();
 }
