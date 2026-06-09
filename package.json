@@ -1,13 +1,14 @@
 {
-  "name": "kshitiz-kumar-bot",
+  "name": "mr-kshitiz-group-bot",
   "version": "1.0.0",
-  "description": "Facebook Chatbot by Kshitiz Kumar",
-  "main": "app.js",
+  "description": "Facebook Group Bot by Kshitiz",
+  "main": "server.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.19.2",
+    "body-parser": "^1.20.2",
     "fca-project-orion": "^1.1.9",
     "axios": "^1.7.2"
   }
