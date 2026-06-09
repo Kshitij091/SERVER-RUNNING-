@@ -1,14 +1,14 @@
-            const express = require('express');
+const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
-const { exec } = require('child_process');
+const { startBotEngine } = require('./index.js'); // Direct import done here
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Create an empty config if it doesn't exist to prevent boot crash
+// Create an empty config if it doesn't exist
 if (!fs.existsSync('./bot_config.json')) {
     fs.writeFileSync('./bot_config.json', JSON.stringify({}));
 }
@@ -98,18 +98,21 @@ app.post('/start-bot', (req, res) => {
         };
         
         fs.writeFileSync('./bot_config.json', JSON.stringify(configData, null, 2));
-        res.send("<h2>Configuration Saved! Starting ᎷᎡ༒ᴋꜱʜɪᴛɪᴊ༒ Bot...</h2>");
+        res.send("<h2>Configuration Saved! Starting ᎷᎡ༒ᴋꜱʜɪᴛɪᴢ༒ Bot Inside Active Thread...</h2>");
         
-        // Non-blocking separate background thread run for zero-timeout
-        const child = exec('node index.js');
-        child.stdout.on('data', (data) => console.log(`Bot Log: ${data}`));
-        child.stderr.on('data', (data) => console.error(`Bot Error Log: ${data}`));
+        // Triggering the engine directly inside the main thread safely
+        console.log("Initializing bot engine from dashboard trigger...");
+        startBotEngine();
+
     } catch (e) {
         res.send("<h2>Error: Invalid format or syntax issue!</h2>");
     }
 });
 
-// Render hooks port binding immediately
+// Start web server and auto-boot if configuration already exists
 app.listen(PORT, () => {
     console.log(`Web Server is up and alive on port ${PORT}`);
+    // Agar Render reload hota hai aur pehle se login details hain, toh bot automatically start ho jayega
+    startBotEngine(); 
 });
+            
