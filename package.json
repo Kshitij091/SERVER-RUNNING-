@@ -1,7 +1,7 @@
 {
   "name": "messenger-group-bot",
   "version": "1.0.0",
-  "description": "Messenger Group Chat Bot with Integrated Dashboard",
+  "description": "Messenger Group Chat Bot with Crash Proof Dashboard",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
